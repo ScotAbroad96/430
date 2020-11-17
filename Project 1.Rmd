@@ -76,7 +76,7 @@ Prep Code:
 ```{r}
 library(wooldridge) 
 data('nbasal')
-data_raw=nbasal
+data_raw = subset(nbasal, select = -c(lwage))
 set.seed(100)
 n = nrow(data_raw)
 data_index = sample(n, floor(0.8 * n))
@@ -120,8 +120,8 @@ at = 1:ncol(boruta.data$ImpHistory), cex.axis = 0.7)
 
 ##
 ```{r}
-ss=regsubsets(wage~., nbest=10, data)
-subsets(ss,statistic="cp",legend=F,main="Mallows CP",xlim=c(8, 10), ylim=c(5,10),cex=.55)
+ss=regsubsets(wage~., nbest=1, data)
+subsets(ss,statistic="cp",legend=F,main="Mallows CP", ylim = c(0, 5) , cex=.75)
 
 best.model = which(summary(ss)$cp == min(summary(ss)$cp)) 
 which((cbind(as.matrix(summary(ss)$which), summary(ss)$cp)[best.model,])==1)
