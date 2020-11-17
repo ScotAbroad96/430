@@ -120,18 +120,8 @@ at = 1:ncol(boruta.data$ImpHistory), cex.axis = 0.7)
 
 ## (b) Using Mallows Cp identify the top 10 predictors
 ```{r}
+#This shows the best 8. Explain why we are finding the best 8 not the best 10.
 ss=regsubsets(wage~., nbest=1, data)
 subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), xlim = c(8, 12), min.size = 8)
-#ignore this for now
-best.model = which(summary(ss)$cp == min(summary(ss)$cp)) 
-which((cbind(as.matrix(summary(ss)$which), summary(ss)$cp)[best.model,])==1)
 ```
 
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-Hello Kate can you see this
-yes
