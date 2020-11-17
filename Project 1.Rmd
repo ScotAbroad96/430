@@ -128,7 +128,29 @@ subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), x
 
 # 2. Descriptive Analysis: Perform a univariate analysis following the steps below.
 ## (a) Begin by providing a descriptive analysis of your variables. This should include things like histograms, quantile plots, correlation plots, etc.
+1. draft (kate)
+2. avgmin (kate)
+3. points (kate)
+4. rebounds (rob)
+5. exper (rob)
+6. age (rob)
+7. black (craig)
+8. center (craig)
+9. assists (jake)
+10. allstar (jake)
+
 ## (b) Estimate density plots for all your variables.
+1. draft (kate)
+2. avgmin (kate)
+3. points (kate)
+4. rebounds (rob)
+5. exper (rob)
+6. age (rob)
+7. black (craig)
+8. center (craig)
+9. assists (jake)
+10. allstar (jake)
+
 ## (c) Identify if there are any non-linearities within your variables. What transformations should you perform to make them linear? What would happen if you included non-linear variables in your regression models without transforming them first?
 ## (d) Comment on any outliers and/or unusual features of your variables.
 ## (e) If you have any NAs, impute them using any of the methods discussed in class but make sure to justify your choice.
