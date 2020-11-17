@@ -81,7 +81,6 @@ set.seed(100)
 n = nrow(data_raw)
 data_index = sample(n, floor(0.8 * n))
 data = data_raw[data_index, ]
-attach(data)
 test = data_raw[-data_index, ]
 
 data$marr <- as.factor(data$marr)
@@ -92,6 +91,8 @@ data$black <- as.factor(data$black)
 data$allstar <- as.factor(data$allstar)
 data$children <- as.factor(data$children)
 data$marrblck <- as.factor(data$marrblck)
+
+attach(data)
 ```
 
 ## (a) Using the Boruta Algorithm identify the top 10 predictors
@@ -122,15 +123,54 @@ at = 1:ncol(boruta.data$ImpHistory), cex.axis = 0.7)
 ```{r}
 #This shows the best 8. Explain why we are finding the best 8 not the best 10.
 ss=regsubsets(wage~., nbest=1, data)
-subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), xlim = c(8, 12), min.size = 8)
+subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), 
+        xlim = c(8, 12), min.size = 8)
 ```
 ## (c) Based on your findings from parts (a) and (b) above, select your preferred choice of predictors (at least 5). These are the ones you will work with for your actual analysis.
 
 # 2. Descriptive Analysis: Perform a univariate analysis following the steps below.
 ## (a) Begin by providing a descriptive analysis of your variables. This should include things like histograms, quantile plots, correlation plots, etc.
+Correlation Plot of Numeric Variables
+```{r}
+data_numeric = subset(data, select = c(wage, avgmin, points, rebounds, exper, age, assists))
+corrplot(cor(data_numeric))
+```
+A players wage is highly correlated with avgmin and points. However, avgmin and points are also highly correlated with eachother which could create some problems in the model later on. Additionally, experience and age are also highly correlated with each other, although not very highly corrlated with wage. 
+
 1. draft (kate)
+```{r}
+scatter.smooth(x=data$draft,y=data$wage, xlab="Draft", ylab="Wage ($)", 
+               main="Relationship of Draft and Wage" )
+rug(data$draft)
+
+scatterplot(data$wage ~ data$draft,data=data, lwd=3, 
+            main="Scatterplot of Draft and Wage", xlab = "Draft", ylab = "Wage")
+```
+There seems to be a negative relationship between wage and the draft pick. Those who were drafted first, have a higher likelihood of receiving a high salary. As the draft number decreases, so does the expected wage. However, there are also some outliers of individuals who had high draft numbers but still received relatively high wages. 
+
 2. avgmin (kate)
+```{r}
+Boxplot(avgmin, main = "Boxplot of Avgmin")
+qqPlot(data$avgmin, main="Quantile Plot of Avgmin", ylab="Avgmin")
+
+qqPlot(lm(data$wage ~ data$avgmin), envelope = .95, 
+       main="Quantile Plot of Wage ~ Avgmin")
+```
+The boxplot shows us that avgmin scores appear generally symmetrical around a median of 15, without any obvious outliers. The qqplot confirms that the spread appears to follow a normal distribution, although more values appear to lie outside of the [-1,1] norm quantiles than might typically be found in a normal distribution. The quantile plot of wage regressed on avgmin does however show a few outliers outside of the [-2, 2] norm quantiles. 
+
 3. points (kate)
+```{r}
+Boxplot(data$points, main="Boxplot of Points", ylab = "Points")
+
+qqPlot(data$points, main="Quantile Plot of Points", ylab="Points")
+qqPlot(lm(data$wage ~ data$points), envelope = .95,
+       main="Quantile Plot of Wage ~ Points Regression")
+
+scatterplot(data$wage~data$points, data=data, xlab = "Points", ylab = "Wage", 
+            main = "Scatterplot of Wage and Points")
+```
+The boxplot shows us that the median points score is roughly 10 but there are a couple outliers on the upper end of the spectrum between 25 and 30. From the quantile plots, we know that points roughly follows a normal distribution, however there are quite a few outliers in both the quantile plot of points and the quantile plot of wage regressed on points. Finally, from the scatterplot, we can see that there is a positive relationship between points and wage but it is not very strong and there are many outliers. 
+
 4. rebounds (rob)
 5. exper (rob)
 6. age (rob)
@@ -141,8 +181,35 @@ subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), x
 
 ## (b) Estimate density plots for all your variables.
 1. draft (kate)
+```{r}
+summary(draft)
+hist(data$draft, breaks="FD", col="skyblue4", freq = FALSE, 
+     main="Histogram of Draft", xlab="Draft", ylab="Density")
+lines(density(data_na$draft), lwd=2, col="red")
+rug(data$draft)
+```
+Draft density is right skewed, with most of the draft picks being between #7 and #28. The minimum is #1 and the maximum is #139. However, there are also 25 individuals who were not drafted and are therefore excluded from this histogram. 
+
 2. avgmin (kate)
+```{r}
+summary(avgmin)
+hist(data$avgmin, breaks="FD", col="skyblue4", freq = FALSE, 
+     main="Histogram of Avgmin", xlab="Avgmin", ylab="Density", ylim = c(0, 0.04))
+lines(density(data$avgmin), lwd=2, col="red")
+rug(data$avgmin)
+```
+Avgmin's distribution is somewhat similar to a normal distribution. Its median is 24.7 and most of the values are between 17 and 32.
+
 3. points (kate)
+```{r}
+summary(points)
+hist(data$points, breaks="FD", col="skyblue4", freq = FALSE, 
+     main="Histogram of Points", xlab="Points", ylab="Density")
+lines(density(data$points), lwd=2, col="red")
+rug(data$points)
+```
+The distribution for Points is slightly right skewed. Its median is 9.3 and most of the values are between 5.55 and 10.01. There are however a few between 25 and 30 which causes the distributions skewness. 
+
 4. rebounds (rob)
 5. exper (rob)
 6. age (rob)
@@ -152,6 +219,13 @@ subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), x
 10. allstar (jake)
 
 ## (c) Identify if there are any non-linearities within your variables. What transformations should you perform to make them linear? What would happen if you included non-linear variables in your regression models without transforming them first?
+```{r}
+p_all = powerTransform(cbind(draft, avgmin, points, rebounds, exper, age, black, 
+                             center, assists, allstar, wage) ~ 1, data, family="bcnPower")
+summary(p_all)
+```
+
+
 ## (d) Comment on any outliers and/or unusual features of your variables.
 ## (e) If you have any NAs, impute them using any of the methods discussed in class but make sure to justify your choice.
 
