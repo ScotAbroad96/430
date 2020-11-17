@@ -1,0 +1,11 @@
+---
+title: "Project 1"
+author: "Craig Paterson"
+date: "11/16/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
