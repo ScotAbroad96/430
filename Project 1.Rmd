@@ -124,4 +124,27 @@ at = 1:ncol(boruta.data$ImpHistory), cex.axis = 0.7)
 ss=regsubsets(wage~., nbest=1, data)
 subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), xlim = c(8, 12), min.size = 8)
 ```
+## (c) Based on your findings from parts (a) and (b) above, select your preferred choice of predictors (at least 5). These are the ones you will work with for your actual analysis.
+
+# 2. Descriptive Analysis: Perform a univariate analysis following the steps below.
+##(a) Begin by providing a descriptive analysis of your variables. This should include things like histograms, quantile plots, correlation plots, etc.
+## (b) Estimate density plots for all your variables.
+## (c) Identify if there are any non-linearities within your variables. What transformations should you perform to make them linear? What would happen if you included non-linear variables in your regression models without transforming them first?
+## (d) Comment on any outliers and/or unusual features of your variables.
+## (e) If you have any NAs, impute them using any of the methods discussed in class but make sure to justify your choice.
+
+# 3. Model Building: Explore several competing multiple-regression models and decide on one model only. You will need to explain in detail how you arrived at your preferred model. Discuss the economic significance of your parameters, and overall findings. Make sure you discuss your main conclusions and recommendations. At a minimum. you need to include the following checks:
+## (a) Evaluate transformations of variables
+## (b) Test for multicollinearity
+## (c) Test for heteroskedasticity
+## (d) Test for model misspecification
+## (e) Look at Cook’s distance Plot, Residuals Plot
+## (f) Use AIC and BIC for model selection
+## (g) Evaluate the robustness of your coefficient estimates by bootstrapping your model. Provide a histogram of the bootstrapped estimates, and comment on the findings.
+## (h) Use cross-validation to evaluate your model performance
+## (i) Evaluate your model’s out of sample performance by splitting the data into testing and training sets, and predicting on the testing set
+## (j) Note: Make sure to also discuss any relevant marginal effects estimated
+## If you identify any model issues (e.g., multicollinearity, etc.) make sure to resolve them before finalizing your proposed model.
+
+
 
