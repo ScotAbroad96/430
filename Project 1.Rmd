@@ -133,3 +133,4 @@ which((cbind(as.matrix(summary(ss)$which), summary(ss)$cp)[best.model,])==1)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Hello Kate can you see this
