@@ -1,8 +1,132 @@
 ---
 title: "Project 1"
-author: "Craig Paterson"
+author: "Craig Paterson, Rob Dewitt, Kate Hirth, Jake Temkin"
 date: "11/16/2020"
-output: pdf_document
+fontfamily: mathpazo
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: true
+  fig_caption: yes
+  highlight: haddock
+  number_sections: true
+  df_print: paged
+fontsize: 10.5pt
+editor_options:
+chunk_output_type: console
+---
+```{r, echo=FALSE, warning=FALSE, message= FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60))
+```
+
+```{r libraries, echo=FALSE, warning=FALSE, message=FALSE}
+rm(list=ls(all=TRUE))
+rm(list=ls(all=TRUE))
+library(tm)
+library(SnowballC)
+library(lda)
+library(topicmodels)
+library(LDAvis)
+library(dplyr)
+library(stringi)
+library(plyr)
+library(foreign)
+library(xts)
+library(tis)
+library(jsonlite)
+library(FNN)
+library(hexbin)
+library(RColorBrewer)
+library(MASS)
+library(ldatuning)
+library(gofastr)
+library(quantmod)
+library(tseries)
+library(foreign)
+library(forecast)
+library(MASS)
+library(TTR)
+library(vars)
+library(readtext) 
+library(tidyr) 
+library(scales)
+library(tinytex)
+library(fitdistrplus)
+library(rgl)
+library(plotly)
+library(psych)
+library(ggplot2)
+library(car)
+library(effects)
+library(corrplot)
+library(pastecs)
+library("margins")
+library(foreign)
+library(multcomp)
+library(gridExtra)
+library(grid)
+library(AER)
+library(broom)
+library(leaps)
+```
+# (1) Variable Selection:
+
+Prep Code: 
+```{r}
+library(wooldridge) 
+data('nbasal')
+data_raw=nbasal
+set.seed(100)
+n = nrow(data_raw)
+data_index = sample(n, floor(0.8 * n))
+data = data_raw[data_index, ]
+attach(data)
+test = data_raw[-data_index, ]
+
+data$marr <- as.factor(data$marr)
+data$guard <- as.factor(data$guard)
+data$forward <- as.factor(data$forward)
+data$center <- as.factor(data$center)
+data$black <- as.factor(data$black)
+data$allstar <- as.factor(data$allstar)
+data$children <- as.factor(data$children)
+data$marrblck <- as.factor(data$marrblck)
+```
+
+## (a) Using the Boruta Algorithm identify the top 10 predictors
+```{r}
+data_na <- na.omit(data)
+library(Boruta)
+boruta.data <- Boruta(wage~., data_na, doTrace = 2)
+print(boruta.data)
+
+TentativeRoughFix(boruta.data) -> final.boruta
+getSelectedAttributes(final.boruta, withTentative = F)
+
+boruta.df <- attStats(final.boruta)
+print(boruta.df)
+```
+
+```{r}
+plot(boruta.data, xlab = "", xaxt = "n")
+lz<-lapply(1:ncol(boruta.data$ImpHistory),function(i)
+boruta.data$ImpHistory[is.finite(boruta.data$ImpHistory[,i]),i])
+names(lz) <- colnames(boruta.data$ImpHistory)
+Labels <- sort(sapply(lz,median))
+axis(side = 1,las=2,labels = names(Labels),
+at = 1:ncol(boruta.data$ImpHistory), cex.axis = 0.7)
+```
+
+##
+```{r}
+ss=regsubsets(wage~., nbest=10, data)
+subsets(ss,statistic="cp",legend=F,main="Mallows CP",xlim=c(8, 10), ylim=c(5,10),cex=.55)
+
+best.model = which(summary(ss)$cp == min(summary(ss)$cp)) 
+which((cbind(as.matrix(summary(ss)$which), summary(ss)$cp)[best.model,])==1)
+```
+
 ---
 
 ```{r setup, include=FALSE}
