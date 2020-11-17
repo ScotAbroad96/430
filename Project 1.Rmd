@@ -76,7 +76,7 @@ Prep Code:
 ```{r}
 library(wooldridge) 
 data('nbasal')
-data_raw = subset(nbasal, select = -c(lwage, expersq, marrblck, agesq))
+data_raw = subset(nbasal, select = -c(lwage))
 set.seed(100)
 n = nrow(data_raw)
 data_index = sample(n, floor(0.8 * n))
