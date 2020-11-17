@@ -127,7 +127,7 @@ subsets(ss,statistic="cp",legend=F,main="Mallows CP", cex=.75, ylim = c(0, 5), x
 ## (c) Based on your findings from parts (a) and (b) above, select your preferred choice of predictors (at least 5). These are the ones you will work with for your actual analysis.
 
 # 2. Descriptive Analysis: Perform a univariate analysis following the steps below.
-##(a) Begin by providing a descriptive analysis of your variables. This should include things like histograms, quantile plots, correlation plots, etc.
+## (a) Begin by providing a descriptive analysis of your variables. This should include things like histograms, quantile plots, correlation plots, etc.
 ## (b) Estimate density plots for all your variables.
 ## (c) Identify if there are any non-linearities within your variables. What transformations should you perform to make them linear? What would happen if you included non-linear variables in your regression models without transforming them first?
 ## (d) Comment on any outliers and/or unusual features of your variables.
